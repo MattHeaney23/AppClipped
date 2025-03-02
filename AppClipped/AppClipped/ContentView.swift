@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     let items = Array(0...17)
     @State private var selectedItem: Int = 0
-    @State private var enteredURL: String = ""
+    @State private var enteredURL: String = "https://example.com"
 
     var body: some View {
         VStack {
@@ -62,7 +62,9 @@ struct ContentView: View {
             Divider()
 
             Button {
-                print("Selected Item: \(selectedItem)")
+                AppClipCodeGenerator().generateAppClipCode(url: enteredURL, index: selectedItem) { _ in
+                    
+                }
             } label: {
                 Text("Generate App Clip Code")
             }
@@ -70,7 +72,6 @@ struct ContentView: View {
         }
     }
 }
-
 
 #Preview {
     ContentView()
