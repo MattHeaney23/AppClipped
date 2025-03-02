@@ -7,17 +7,39 @@
 
 import SwiftUI
 
+enum SelectedMode: String {
+    case camera = "cam"
+    case nfc = "nfc"
+}
+
+enum LogoStyle: String {
+    case includeAppClipLogo = "includeAppClipLogo"
+    case doNotIncludeAppClipLogo = "doNotIncludeAppClipLogo"
+
+    var showLogoParameter: String {
+        switch self {
+        case .includeAppClipLogo:
+            return "badge"
+        case .doNotIncludeAppClipLogo:
+            return "none"
+        }
+    }
+}
 
 struct ContentView: View {
     let items = Array(0...17)
     @State private var selectedItem: Int = 0
     @State private var enteredURL: String = "https://example.com"
 
+    @State var selectedMode: SelectedMode = .camera
+    @State var logoStyle: LogoStyle = .includeAppClipLogo
+
     var body: some View {
         VStack {
             ScrollView {
                 VStack {
-                    Text("Select Style")
+
+                    Text("Create your app clip")
                         .font(.largeTitle)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
@@ -45,14 +67,24 @@ struct ContentView: View {
                     Divider()
 
                     VStack {
-                        Text("Enter Url")
-                            .font(.largeTitle)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 16)
+                        LabeledContent {
+                            TextField("Enter URL", text: $enteredURL)
+                        } label: {
+                            Text("URL")
+                        }
 
-                        TextField("", text: $enteredURL)
-                            .padding(.horizontal, 16)
+                        Picker("App Clip Type", selection: $selectedMode) {
+                            Text("Camera").tag(SelectedMode.camera)
+                            Text("NFC").tag(SelectedMode.nfc)
+                        }
+
+                        Picker("Logo Type", selection: $logoStyle) {
+                            Text("Show App Clip Logo").tag(LogoStyle.includeAppClipLogo)
+                            Text("Do Not Show App Clip Logo").tag(LogoStyle.doNotIncludeAppClipLogo)
+                        }
+
                     }
+                    .padding(.horizontal, 16)
                 }
                 .padding(.vertical, 16)
             }
@@ -62,8 +94,11 @@ struct ContentView: View {
             Divider()
 
             Button {
-                AppClipCodeGenerator().generateAppClipCode(url: enteredURL, index: selectedItem) { _ in
-                    
+                AppClipCodeGenerator().generateAppClipCode(url: enteredURL,
+                                                           index: selectedItem,
+                                                           selectedMode: selectedMode,
+                                                           logoStyle: logoStyle) { result in
+                    print("result: \(result)")
                 }
             } label: {
                 Text("Generate App Clip Code")

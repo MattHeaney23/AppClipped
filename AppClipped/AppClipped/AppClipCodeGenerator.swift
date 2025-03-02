@@ -5,14 +5,13 @@
 //  Created by Matt Heaney on 02/03/2025.
 //
 
-
 import Cocoa
 
 class AppClipCodeGenerator {
-    func generateAppClipCode(url: String, index: Int, completion: @escaping (Result<String, Error>) -> Void) {
+    func generateAppClipCode(url: String, index: Int, selectedMode: SelectedMode, logoStyle: LogoStyle, completion: @escaping (Result<String, Error>) -> Void) {
         // Set up the save panel
         let savePanel = NSSavePanel()
-        savePanel.nameFieldStringValue = "" // Default filename
+        savePanel.nameFieldStringValue = "AppClip" // Default filename
         savePanel.allowedContentTypes = [.svg] // Restrict to SVG files
         savePanel.canCreateDirectories = true // Allow folder creation
         savePanel.directoryURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Desktop") // Default to Desktop
@@ -24,7 +23,7 @@ class AppClipCodeGenerator {
         }
 
         // Command string using the user-selected path
-        let commandString = "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --index \(index) --output \"\(outputURL.path)\""
+        let commandString = "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --index \(index) --output \"\(outputURL.path)\""
 
         // Use /bin/zsh to interpret the command
         let process = Process()
