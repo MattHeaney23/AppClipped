@@ -8,7 +8,12 @@
 import Cocoa
 
 class AppClipCodeGenerator {
-    func generateAppClipCode(url: String, index: Int, selectedMode: SelectedMode, logoStyle: LogoStyle, completion: @escaping (Result<String, Error>) -> Void) {
+    func generateAppClipCode(url: String,
+                             index: Int?,
+                             backgroundColour: String?,
+                             foregroundColour: String?,
+                             selectedMode: SelectedMode,
+                             logoStyle: LogoStyle, completion: @escaping (Result<String, Error>) -> Void) {
         // Set up the save panel
         let savePanel = NSSavePanel()
         savePanel.nameFieldStringValue = "AppClip" // Default filename
@@ -23,7 +28,16 @@ class AppClipCodeGenerator {
         }
 
         // Command string using the user-selected path
-        let commandString = "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --index \(index) --output \"\(outputURL.path)\""
+        var commandString: String {
+            if let index {
+                return "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --index \(index) --output \"\(outputURL.path)\""
+            } else if let foregroundColour, let backgroundColour {
+                return "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --foreground \(foregroundColour) --background \(backgroundColour) --output \"\(outputURL.path)\""
+            } else {
+                //completion(.failure())
+                fatalError()
+            }
+        }
 
         // Use /bin/zsh to interpret the command
         let process = Process()

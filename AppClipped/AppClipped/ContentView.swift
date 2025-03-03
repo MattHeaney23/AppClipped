@@ -37,6 +37,9 @@ struct ContentView: View {
 
     let labelWidth: CGFloat = 100 // Adjust this to fit the longest label
 
+    @State var backgroundColourHex: String = ""
+    @State var foregroundColourHex: String = ""
+
     var body: some View {
         VStack(spacing: 16) {
             // Segmented Control for Tab Selection
@@ -71,8 +74,37 @@ struct ContentView: View {
                 }
                 .padding(.vertical, 20)
             } else {
-                Text("Custom Color")
-                    .padding(.vertical, 20)
+
+
+                Group {
+
+                    VStack {
+                        HStack {
+                            Text("Background Colour Hex")
+                                .frame(width: 200, alignment: .leading)
+                                .bold()
+                            TextField("Hex", text: $backgroundColourHex)
+                                .frame(width: 120)
+                                .textFieldStyle(.roundedBorder)
+                                .padding(.leading, 8)
+                        }
+
+                        HStack {
+                            Text("Foreground Colour Hex")
+                                .frame(width: 200, alignment: .leading)
+                                .bold()
+                            TextField("Hex", text: $foregroundColourHex)
+                                .frame(width: 120)
+                                .textFieldStyle(.roundedBorder)
+                                .padding(.leading, 8)
+                        }
+
+                    }
+
+                }
+                .frame(width: 120, height: 120)
+                .padding(.vertical, 20)
+
             }
 
             VStack {
@@ -114,12 +146,31 @@ struct ContentView: View {
             Divider()
 
             Button {
-                AppClipCodeGenerator().generateAppClipCode(url: enteredURL,
-                                                           index: selectedItem,
-                                                           selectedMode: selectedMode,
-                                                           logoStyle: logoStyle) { result in
-                    print("result: \(result)")
+
+                if selectedTab == 0 {
+                    AppClipCodeGenerator().generateAppClipCode(url: enteredURL,
+                                                               index: selectedItem,
+                                                               backgroundColour: nil,
+                                                               foregroundColour: nil,
+                                                               selectedMode: selectedMode,
+                                                               logoStyle: logoStyle) { result in
+
+                        print("result: \(result)")
+                    }
                 }
+                else {
+                    AppClipCodeGenerator().generateAppClipCode(url: enteredURL,
+                                                               index: nil,
+                                                               backgroundColour: backgroundColourHex,
+                                                               foregroundColour: foregroundColourHex,
+                                                               selectedMode: selectedMode,
+                                                               logoStyle: logoStyle) { result in
+
+                        print("result: \(result)")
+                    }
+                }
+
+
             } label: {
                 Text("Generate App Clip Code")
             }
