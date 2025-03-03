@@ -26,6 +26,7 @@ enum LogoStyle: String {
     }
 }
 
+
 struct ContentView: View {
     let items = Array(0...17)
     @State private var selectedItem: Int = 0
@@ -37,8 +38,10 @@ struct ContentView: View {
 
     let labelWidth: CGFloat = 100 // Adjust this to fit the longest label
 
-    @State var backgroundColourHex: String = ""
-    @State var foregroundColourHex: String = ""
+    @State private var backgroundColor: Color = .blue
+    @State private var foregroundColor: Color = .white
+    @State private var backgroundColourHex: String = ""
+    @State private var foregroundColourHex: String = ""
 
     var body: some View {
         VStack(spacing: 16) {
@@ -74,37 +77,31 @@ struct ContentView: View {
                 }
                 .padding(.vertical, 20)
             } else {
-
-
-                Group {
-
-                    VStack {
-                        HStack {
-                            Text("Background Colour Hex")
-                                .frame(width: 200, alignment: .leading)
-                                .bold()
-                            TextField("Hex", text: $backgroundColourHex)
-                                .frame(width: 120)
-                                .textFieldStyle(.roundedBorder)
-                                .padding(.leading, 8)
-                        }
-
-                        HStack {
-                            Text("Foreground Colour Hex")
-                                .frame(width: 200, alignment: .leading)
-                                .bold()
-                            TextField("Hex", text: $foregroundColourHex)
-                                .frame(width: 120)
-                                .textFieldStyle(.roundedBorder)
-                                .padding(.leading, 8)
-                        }
-
+                VStack(spacing: 12) {
+                    HStack {
+                        Text("Background Colour")
+                            .frame(width: 200, alignment: .leading)
+                            .bold()
+                        ColorPicker("", selection: $backgroundColor, supportsOpacity: false)
+                            .labelsHidden()
+                            .onChange(of: backgroundColor) { _ in
+                                backgroundColourHex = backgroundColor.toHex() ?? ""
+                            }
                     }
 
+                    HStack {
+                        Text("Foreground Colour")
+                            .frame(width: 200, alignment: .leading)
+                            .bold()
+                        ColorPicker("", selection: $foregroundColor, supportsOpacity: false)
+                            .labelsHidden()
+                            .onChange(of: foregroundColor) { _ in
+                                foregroundColourHex = foregroundColor.toHex() ?? ""
+                            }
+                    }
                 }
-                .frame(width: 120, height: 120)
+                .frame(height: 120)
                 .padding(.vertical, 20)
-
             }
 
             VStack {
@@ -147,30 +144,31 @@ struct ContentView: View {
 
             Button {
 
+                print("\(backgroundColourHex), \(foregroundColourHex)")
+
                 if selectedTab == 0 {
-                    AppClipCodeGenerator().generateAppClipCode(url: enteredURL,
-                                                               index: selectedItem,
-                                                               backgroundColour: nil,
-                                                               foregroundColour: nil,
-                                                               selectedMode: selectedMode,
-                                                               logoStyle: logoStyle) { result in
-
+                    AppClipCodeGenerator().generateAppClipCode(
+                        url: enteredURL,
+                        index: selectedItem,
+                        backgroundColour: nil,
+                        foregroundColour: nil,
+                        selectedMode: selectedMode,
+                        logoStyle: logoStyle
+                    ) { result in
+                        print("result: \(result)")
+                    }
+                } else {
+                    AppClipCodeGenerator().generateAppClipCode(
+                        url: enteredURL,
+                        index: nil,
+                        backgroundColour: backgroundColor.toHex() ?? "",
+                        foregroundColour: foregroundColor.toHex() ?? "",
+                        selectedMode: selectedMode,
+                        logoStyle: logoStyle
+                    ) { result in
                         print("result: \(result)")
                     }
                 }
-                else {
-                    AppClipCodeGenerator().generateAppClipCode(url: enteredURL,
-                                                               index: nil,
-                                                               backgroundColour: backgroundColourHex,
-                                                               foregroundColour: foregroundColourHex,
-                                                               selectedMode: selectedMode,
-                                                               logoStyle: logoStyle) { result in
-
-                        print("result: \(result)")
-                    }
-                }
-
-
             } label: {
                 Text("Generate App Clip Code")
             }
@@ -181,4 +179,15 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+}
+
+
+extension Color {
+    func toHex() -> String? {
+        guard let nsColor = NSColor(self).usingColorSpace(.sRGB) else { return nil }
+        let r = Int(nsColor.redComponent * 255)
+        let g = Int(nsColor.greenComponent * 255)
+        let b = Int(nsColor.blueComponent * 255)
+        return String(format: "%02X%02X%02X", r, g, b) // Returns hex without #
+    }
 }
