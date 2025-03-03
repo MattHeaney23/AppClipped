@@ -33,61 +33,81 @@ struct ContentView: View {
 
     @State var selectedMode: SelectedMode = .camera
     @State var logoStyle: LogoStyle = .includeAppClipLogo
+    @State private var selectedTab: Int = 0
+
+    let labelWidth: CGFloat = 100 // Adjust this to fit the longest label
 
     var body: some View {
-        VStack {
-            ScrollView {
-                VStack {
+        VStack(spacing: 16) {
+            // Segmented Control for Tab Selection
+            Picker("Colour Mode", selection: $selectedTab) {
+                Text("Select Style").tag(0)
+                Text("Custom Style").tag(1)
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
 
-                    Text("Create your app clip")
-                        .font(.largeTitle)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 10) {
-                            ForEach(items, id: \.self) { i in
-                                Image("AppClipStyle\(i)")
-                                    .resizable()
-                                    .frame(width: 120, height: 120)
-                                    .background(Color.blue.opacity(0.7))
-                                    .cornerRadius(8)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(selectedItem == i ? Color.blue : Color.clear, lineWidth: 4)
-                                    )
-                                    .onTapGesture {
-                                        selectedItem = i
-                                    }
-                            }
+            // Tab Views
+            if selectedTab == 0 {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(items, id: \.self) { i in
+                            Image("AppClipStyle\(i)")
+                                .resizable()
+                                .frame(width: 120, height: 120)
+                                .background(Color.blue.opacity(0.7))
+                                .cornerRadius(8)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(selectedItem == i ? Color.blue : Color.clear, lineWidth: 4)
+                                )
+                                .onTapGesture {
+                                    selectedItem = i
+                                }
                         }
-                        .padding(.horizontal, 16)
-                    }
-
-                    Divider()
-
-                    VStack {
-                        LabeledContent {
-                            TextField("Enter URL", text: $enteredURL)
-                        } label: {
-                            Text("URL")
-                        }
-
-                        Picker("App Clip Type", selection: $selectedMode) {
-                            Text("Camera").tag(SelectedMode.camera)
-                            Text("NFC").tag(SelectedMode.nfc)
-                        }
-
-                        Picker("Logo Type", selection: $logoStyle) {
-                            Text("Show App Clip Logo").tag(LogoStyle.includeAppClipLogo)
-                            Text("Do Not Show App Clip Logo").tag(LogoStyle.doNotIncludeAppClipLogo)
-                        }
-
                     }
                     .padding(.horizontal, 16)
                 }
-                .padding(.vertical, 16)
+                .padding(.vertical, 20)
+            } else {
+                Text("Custom Color")
+                    .padding(.vertical, 20)
             }
+
+            VStack {
+                HStack {
+                    Text("URL")
+                        .frame(width: labelWidth, alignment: .leading)
+                        .bold()
+                    TextField("Enter URL", text: $enteredURL)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.leading, 8)
+                }
+
+                HStack {
+                    Text("App Clip Type")
+                        .frame(width: labelWidth, alignment: .leading)
+                        .bold()
+                    Picker("", selection: $selectedMode) {
+                        Text("Camera").tag(SelectedMode.camera)
+                        Text("NFC").tag(SelectedMode.nfc)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+
+                HStack {
+                    Text("Logo Type")
+                        .frame(width: labelWidth, alignment: .leading)
+                        .bold()
+                    Picker("", selection: $logoStyle) {
+                        Text("Show App Clip Logo").tag(LogoStyle.includeAppClipLogo)
+                        Text("Do Not Show App Clip Logo").tag(LogoStyle.doNotIncludeAppClipLogo)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+            }
+            .padding(.horizontal, 16)
 
             Spacer()
 
