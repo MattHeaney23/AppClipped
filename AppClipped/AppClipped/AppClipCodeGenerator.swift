@@ -13,47 +13,59 @@ class AppClipCodeGenerator {
                              backgroundColour: String?,
                              foregroundColour: String?,
                              selectedMode: SelectedMode,
-                             logoStyle: LogoStyle, completion: @escaping (Result<String, Error>) -> Void) {
+                             logoStyle: LogoStyle,
+                             completion: @escaping (Result<String, Error>) -> Void) {
         // Set up the save panel
         let savePanel = NSSavePanel()
-        savePanel.nameFieldStringValue = "AppClip" // Default filename
-        savePanel.allowedContentTypes = [.svg] // Restrict to SVG files
-        savePanel.canCreateDirectories = true // Allow folder creation
-        savePanel.directoryURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Desktop") // Default to Desktop
+        savePanel.nameFieldStringValue = "AppClip"
+        savePanel.allowedContentTypes = [.svg]
+        savePanel.canCreateDirectories = true
+        savePanel.directoryURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Desktop")
 
-        // Show the save panel
         guard savePanel.runModal() == .OK, let outputURL = savePanel.url else {
             completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User canceled save dialog"])))
             return
         }
 
-        // Command string using the user-selected path
-        var commandString: String {
-            if let index {
-                return "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --index \(index) --output \"\(outputURL.path)\""
-            } else if let foregroundColour, let backgroundColour {
-                return "/Library/Developer/AppClipCodeGenerator/AppClipCodeGenerator.bundle/Contents/MacOS/AppClipCodeGenerator generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --foreground \(foregroundColour) --background \(backgroundColour) --output \"\(outputURL.path)\""
-            } else {
-                //completion(.failure())
-                fatalError()
+        // Define the tool path
+        let toolPath = "/usr/local/bin/AppClipCodeGenerator"
+
+        // Check if the tool exists
+        guard FileManager.default.fileExists(atPath: toolPath) else {
+            DispatchQueue.main.async {
+                let alert = NSAlert()
+                alert.messageText = "AppClipCodeGenerator Not Found"
+                alert.informativeText = "This app requires AppClipCodeGenerator installed at /usr/local/bin/. Please download and install it from [source URL] or contact support for instructions."
+                alert.addButton(withTitle: "OK")
+                alert.runModal()
             }
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "AppClipCodeGenerator not found at /usr/local/bin/. Please install it."])))
+            return
         }
 
-        // Use /bin/zsh to interpret the command
+        // Build the command string
+        var commandString: String
+        if let index = index {
+            commandString = "\"\(toolPath)\" generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --index \(index) --output \"\(outputURL.path)\""
+        } else if let foregroundColour = foregroundColour, let backgroundColour = backgroundColour {
+            commandString = "\"\(toolPath)\" generate --url \"\(url)\" --type \(selectedMode.rawValue) --logo \(logoStyle.showLogoParameter) --foreground \(foregroundColour) --background \(backgroundColour) --output \"\(outputURL.path)\""
+        } else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid parameters: provide either index or both foreground and background colors"])))
+            return
+        }
+
+        // Run the command with /bin/sh
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/zsh")
+        process.executableURL = URL(fileURLWithPath: "/bin/sh")
         process.arguments = ["-c", commandString]
 
-        // Set up pipes
         let pipe = Pipe()
         process.standardOutput = pipe
         let errorPipe = Pipe()
         process.standardError = errorPipe
 
-        // Log the command
         print("Running command: \(commandString)")
 
-        // Run the process
         do {
             try process.run()
             process.waitUntilExit()
