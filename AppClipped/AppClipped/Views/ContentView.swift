@@ -8,16 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
-    let items = Array(0...17)
 
     @State private var selectedItem: Int = 0
-    @State private var enteredURL: String = "https://example.com"
+    @State private var enteredURL: String = ""
 
     @State var selectedMode: SelectedMode = .camera
     @State var logoStyle: LogoStyle = .includeAppClipLogo
     @State private var selectedTab: Int = 0
 
-    let labelWidth: CGFloat = 100 // Adjust this to fit the longest label
+    let labelWidth: CGFloat = 100
 
     @State private var backgroundColor: Color = .blue
     @State private var foregroundColor: Color = .white
@@ -83,7 +82,7 @@ struct ContentView: View {
     func setColourSelection() -> some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
-                ForEach(items, id: \.self) { i in
+                ForEach(0...17, id: \.self) { i in
                     Image("AppClipStyle\(i)")
                         .resizable()
                         .frame(width: 120, height: 120)
@@ -146,30 +145,27 @@ struct ContentView: View {
             Divider()
 
             Button {
-
                 print("\(backgroundColourHex), \(foregroundColourHex)")
+                Task {
 
-                if selectedTab == 0 {
-                    AppClipCodeGenerator().generateAppClipCode(
-                        url: enteredURL,
-                        index: selectedItem,
-                        backgroundColour: nil,
-                        foregroundColour: nil,
-                        selectedMode: selectedMode,
-                        logoStyle: logoStyle
-                    ) { result in
-                        print("result: \(result)")
-                    }
-                } else {
-                    AppClipCodeGenerator().generateAppClipCode(
-                        url: enteredURL,
-                        index: nil,
-                        backgroundColour: backgroundColor.toHex() ?? "",
-                        foregroundColour: foregroundColor.toHex() ?? "",
-                        selectedMode: selectedMode,
-                        logoStyle: logoStyle
-                    ) { result in
-                        print("result: \(result)")
+                    if selectedTab == 0 {
+                        try await AppClipCodeGenerator().generateAppClipCode(
+                            url: enteredURL,
+                            index: selectedItem,
+                            backgroundColour: nil,
+                            foregroundColour: nil,
+                            selectedMode: selectedMode,
+                            logoStyle: logoStyle
+                        )
+                    } else {
+                        try await AppClipCodeGenerator().generateAppClipCode(
+                            url: enteredURL,
+                            index: nil,
+                            backgroundColour: backgroundColor.toHex() ?? "",
+                            foregroundColour: foregroundColor.toHex() ?? "",
+                            selectedMode: selectedMode,
+                            logoStyle: logoStyle
+                        )
                     }
                 }
             } label: {
