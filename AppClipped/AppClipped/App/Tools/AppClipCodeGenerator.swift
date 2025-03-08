@@ -14,9 +14,7 @@ class AppClipCodeGenerator {
     let commandExecuter = CommandExecuter()
 
     func generateAppClipCode(url: String,
-                             index: Int?,
-                             backgroundColour: String?,
-                             foregroundColour: String?,
+                             selectedColorMode: SelectedColorMode,
                              selectedMode: SelectedMode,
                              logoStyle: LogoStyle) async throws {
 
@@ -30,9 +28,7 @@ class AppClipCodeGenerator {
 
         try await commandExecuter.executeCommand(toolPath: toolPath,
                                                  url: url,
-                                                 index: index,
-                                                 backgroundColour: backgroundColour,
-                                                 foregroundColour: foregroundColour,
+                                                 selectedColorMode: selectedColorMode,
                                                  selectedMode: selectedMode,
                                                  logoStyle: logoStyle,
                                                  outputURL: outputURL)

@@ -9,19 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State private var selectedItem: Int = 0
     @State private var enteredURL: String = ""
+
+    @State private var selectedColorModeTab: Int = 0
+    @State private var selectedColorIndexItem: Int = 0
+    @State private var customBackgroundColor: Color = .blue
+    @State private var customForegroundColor: Color = .white
 
     @State var selectedMode: SelectedMode = .camera
     @State var logoStyle: LogoStyle = .includeAppClipLogo
-    @State private var selectedTab: Int = 0
 
     let labelWidth: CGFloat = 100
-
-    @State private var backgroundColor: Color = .blue
-    @State private var foregroundColor: Color = .white
-    @State private var backgroundColourHex: String = ""
-    @State private var foregroundColourHex: String = ""
 
     var body: some View {
         VStack(spacing: 16) {
@@ -37,7 +35,7 @@ struct ContentView: View {
 
     @ViewBuilder
     func colourModeSelector() -> some View {
-        Picker("Colour Mode", selection: $selectedTab) {
+        Picker("Colour Mode", selection: $selectedColorModeTab) {
             Text("Select Style").tag(0)
             Text("Custom Style").tag(1)
         }
@@ -48,7 +46,7 @@ struct ContentView: View {
 
     @ViewBuilder
     func colourTabView() -> some View {
-        if selectedTab == 0 {
+        if selectedColorModeTab == 0 {
             setColourSelection()
         } else {
             customColourSelection()
@@ -62,7 +60,7 @@ struct ContentView: View {
                 Text("Background Colour")
                     .frame(width: 200, alignment: .leading)
                     .bold()
-                ColorPicker("", selection: $backgroundColor, supportsOpacity: false)
+                ColorPicker("", selection: $customBackgroundColor, supportsOpacity: false)
                     .labelsHidden()
             }
 
@@ -70,7 +68,7 @@ struct ContentView: View {
                 Text("Foreground Colour")
                     .frame(width: 200, alignment: .leading)
                     .bold()
-                ColorPicker("", selection: $foregroundColor, supportsOpacity: false)
+                ColorPicker("", selection: $customForegroundColor, supportsOpacity: false)
                     .labelsHidden()
             }
         }
@@ -90,10 +88,10 @@ struct ContentView: View {
                         .cornerRadius(8)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(selectedItem == i ? Color.blue : Color.clear, lineWidth: 4)
+                                .stroke(selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
                         )
                         .onTapGesture {
-                            selectedItem = i
+                            selectedColorIndexItem = i
                         }
                 }
             }
@@ -145,28 +143,22 @@ struct ContentView: View {
             Divider()
 
             Button {
-                print("\(backgroundColourHex), \(foregroundColourHex)")
                 Task {
-
-                    if selectedTab == 0 {
-                        try await AppClipCodeGenerator().generateAppClipCode(
-                            url: enteredURL,
-                            index: selectedItem,
-                            backgroundColour: nil,
-                            foregroundColour: nil,
-                            selectedMode: selectedMode,
-                            logoStyle: logoStyle
-                        )
-                    } else {
-                        try await AppClipCodeGenerator().generateAppClipCode(
-                            url: enteredURL,
-                            index: nil,
-                            backgroundColour: backgroundColor.toHex() ?? "",
-                            foregroundColour: foregroundColor.toHex() ?? "",
-                            selectedMode: selectedMode,
-                            logoStyle: logoStyle
-                        )
+                    var selectedColorMode: SelectedColorMode {
+                        if selectedColorModeTab == 0 {
+                            return .index(indexID: selectedColorIndexItem)
+                        } else {
+                            return .custom(foregroundColour: customBackgroundColor,
+                                           backgroundColor: customForegroundColor)
+                        }
                     }
+
+                    try await AppClipCodeGenerator().generateAppClipCode(
+                        url: enteredURL,
+                        selectedColorMode: selectedColorMode,
+                        selectedMode: selectedMode,
+                        logoStyle: logoStyle
+                    )
                 }
             } label: {
                 Text("Generate App Clip Code")
@@ -174,7 +166,6 @@ struct ContentView: View {
             .padding(.vertical, 16)
         }
     }
-
 }
 
 #Preview {
