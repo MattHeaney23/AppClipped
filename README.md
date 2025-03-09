@@ -46,6 +46,11 @@ Since this is an open-source project, contributions are welcomed and encouraged!
 
 Contributions may include adding new features, optimizing existing functionality, or improving the user experience.
 
+To contribute:
+- Fork this repo
+- Clone the repo to your machine
+- Raise a PR
+
 ## Limitations
 
 The main limitation of this project is that users must have Apple's `AppClipCodeGenerator` tool downloaded and installed, as this app is a wrapper for that tool.
