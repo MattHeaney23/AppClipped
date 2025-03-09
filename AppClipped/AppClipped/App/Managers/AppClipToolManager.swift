@@ -14,7 +14,13 @@ class AppClipToolManager {
         return pathForAppClipCodeGenerator() != nil
     }
 
-    public func pathForAppClipCodeGenerator() -> String? {
+    private func pathForAppClipCodeGenerator() -> String? {
+
+        let defaultPath = "/usr/local/bin/AppClipCodeGenerator"
+        if FileManager.default.fileExists(atPath: defaultPath) {
+            return defaultPath
+        }
+
         if let toolPath = findToolPath(), FileManager.default.fileExists(atPath: toolPath) {
             return toolPath
         }

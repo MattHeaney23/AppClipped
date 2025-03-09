@@ -7,7 +7,7 @@
 
 import Cocoa
 
-///A class that will handle the process of generating and saving a new App Clip code
+///Handles the process of generating and saving a new App Clip code
 class AppClipCodeManager {
 
     let appClipSaveManager = AppClipSaveManager()

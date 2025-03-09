@@ -12,21 +12,20 @@ class AppClipGeneratorViewModel: ObservableObject {
     let appClipToolManager = AppClipToolManager()
     let appClipCodeManager = AppClipCodeManager()
 
-    @State var enteredURL: String = ""
+    @Published var enteredURL: String = ""
 
-    @State var selectedColorModeTab: Int = 0
-    @State var selectedColorIndexItem: Int = 0
-    @State var customBackgroundColor: Color = .blue
-    @State var customForegroundColor: Color = .white
+    @Published var selectedColorModeTab: Int = 0
+    @Published var selectedColorIndexItem: Int = 0
+    @Published var customBackgroundColor: Color = .blue
+    @Published var customForegroundColor: Color = .white
 
-    @State var selectedMode: SelectedMode = .camera
-    @State var logoStyle: LogoStyle = .includeAppClipLogo
+    @Published var selectedMode: SelectedMode = .camera
+    @Published var logoStyle: LogoStyle = .includeAppClipLogo
 
-    @State var errorMessage: String?
+    @Published var errorMessage: String?
+    @Published var shouldShowInstallationMessage: Bool = false
 
     let labelWidth: CGFloat = 100
-
-    @Published var shouldShowInstallationMessage: Bool = false
 
     init() {
         self.shouldShowInstallationMessage = !appClipToolManager.isToolInstaller()
