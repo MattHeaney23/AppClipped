@@ -1,8 +1,15 @@
+
+![newicon](https://github.com/user-attachments/assets/7eb0d2e2-e16c-4329-9297-5ded09e14f1b)
+
 # AppClipped
 
 AppClipped is a macOS application designed to improve the generation and saving of App Clip Codes. This tool provides a clean and simple interface for working with Apple's App Clip Codes.
 
 This app will soon be released as a free-to-download tool to assist projects using App Clip Codes.
+
+## Screenshot
+
+<img width="1012" alt="Screenshot 2025-03-09 at 09 55 36" src="https://github.com/user-attachments/assets/25685e5c-00ab-4636-bc28-f01400b21365" />
 
 ## Features
 
