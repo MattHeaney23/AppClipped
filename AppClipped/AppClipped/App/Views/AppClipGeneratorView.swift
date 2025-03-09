@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  AppClipGeneratorView.swift
 //  AppClipped
 //
 //  Created by Matt Heaney on 01/03/2025.
@@ -7,21 +7,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct AppClipGeneratorView: View {
 
-    @State private var enteredURL: String = ""
-
-    @State private var selectedColorModeTab: Int = 0
-    @State private var selectedColorIndexItem: Int = 0
-    @State private var customBackgroundColor: Color = .blue
-    @State private var customForegroundColor: Color = .white
-
-    @State var selectedMode: SelectedMode = .camera
-    @State var logoStyle: LogoStyle = .includeAppClipLogo
-
-    let labelWidth: CGFloat = 100
-
-    let appClipCodeManager = AppClipCodeManager()
+    @StateObject var viewModel = AppClipGeneratorViewModel()
 
     var body: some View {
         VStack(spacing: 16) {
@@ -37,7 +25,7 @@ struct ContentView: View {
 
     @ViewBuilder
     func colourModeSelector() -> some View {
-        Picker("Colour Mode", selection: $selectedColorModeTab) {
+        Picker("Colour Mode", selection: $viewModel.selectedColorModeTab) {
             Text("Select Style").tag(0)
             Text("Custom Style").tag(1)
         }
@@ -48,7 +36,7 @@ struct ContentView: View {
 
     @ViewBuilder
     func colourTabView() -> some View {
-        if selectedColorModeTab == 0 {
+        if viewModel.selectedColorModeTab == 0 {
             setColourSelection()
         } else {
             customColourSelection()
@@ -62,7 +50,7 @@ struct ContentView: View {
                 Text("Background Colour")
                     .frame(width: 200, alignment: .leading)
                     .bold()
-                ColorPicker("", selection: $customBackgroundColor, supportsOpacity: false)
+                ColorPicker("", selection: $viewModel.customBackgroundColor, supportsOpacity: false)
                     .labelsHidden()
             }
 
@@ -70,7 +58,7 @@ struct ContentView: View {
                 Text("Foreground Colour")
                     .frame(width: 200, alignment: .leading)
                     .bold()
-                ColorPicker("", selection: $customForegroundColor, supportsOpacity: false)
+                ColorPicker("", selection: $viewModel.customForegroundColor, supportsOpacity: false)
                     .labelsHidden()
             }
         }
@@ -90,10 +78,10 @@ struct ContentView: View {
                         .cornerRadius(8)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
+                                .stroke(viewModel.selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
                         )
                         .onTapGesture {
-                            selectedColorIndexItem = i
+                            viewModel.selectedColorIndexItem = i
                         }
                 }
             }
@@ -107,18 +95,18 @@ struct ContentView: View {
         VStack {
             HStack {
                 Text("URL")
-                    .frame(width: labelWidth, alignment: .leading)
+                    .frame(width: viewModel.labelWidth, alignment: .leading)
                     .bold()
-                TextField("Enter URL", text: $enteredURL)
+                TextField("Enter URL", text: $viewModel.enteredURL)
                     .textFieldStyle(.roundedBorder)
                     .padding(.leading, 8)
             }
 
             HStack {
                 Text("App Clip Type")
-                    .frame(width: labelWidth, alignment: .leading)
+                    .frame(width: viewModel.labelWidth, alignment: .leading)
                     .bold()
-                Picker("", selection: $selectedMode) {
+                Picker("", selection: $viewModel.selectedMode) {
                     Text("Camera").tag(SelectedMode.camera)
                     Text("NFC").tag(SelectedMode.nfc)
                 }
@@ -127,9 +115,9 @@ struct ContentView: View {
 
             HStack {
                 Text("Logo Type")
-                    .frame(width: labelWidth, alignment: .leading)
+                    .frame(width: viewModel.labelWidth, alignment: .leading)
                     .bold()
-                Picker("", selection: $logoStyle) {
+                Picker("", selection: $viewModel.logoStyle) {
                     Text("Show App Clip Logo").tag(LogoStyle.includeAppClipLogo)
                     Text("Do Not Show App Clip Logo").tag(LogoStyle.doNotIncludeAppClipLogo)
                 }
@@ -146,30 +134,17 @@ struct ContentView: View {
 
             Button {
                 Task {
-                    var selectedColorMode: SelectedColorMode {
-                        if selectedColorModeTab == 0 {
-                            return .index(indexID: selectedColorIndexItem)
-                        } else {
-                            return .custom(foregroundColour: customBackgroundColor,
-                                           backgroundColor: customForegroundColor)
-                        }
-                    }
-
-                    try await appClipCodeManager.generateAppClipCode(
-                        url: enteredURL,
-                        selectedColorMode: selectedColorMode,
-                        selectedMode: selectedMode,
-                        logoStyle: logoStyle
-                    )
+                    await viewModel.generateAppClipCode()
                 }
             } label: {
                 Text("Generate App Clip Code")
             }
-            .padding(.vertical, 16)
-        }
-    }
-}
 
-#Preview {
-    ContentView()
+            if viewModel.shouldShowInstallationMessage {
+                Text("AppClipCodeGenerator from Apple is required to use this tool. Please download it from https://developer.apple.com/download")
+                    .font(.caption2)
+            }
+        }
+        .padding(.vertical, 16)
+    }
 }

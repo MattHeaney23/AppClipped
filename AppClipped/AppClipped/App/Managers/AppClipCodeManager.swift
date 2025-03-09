@@ -23,8 +23,8 @@ class AppClipCodeManager {
             throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User canceled save dialog"])
         }
 
-        guard let toolPath = appClipToolManager.validateToolInstallation() else {
-            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "AppClipCodeGenerator not found. Please install it."])
+        guard let toolPath = appClipToolManager.pathForAppClipCodeGenerator() else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "AppClipped requires AppClipCodeGenerator installed. Please download and install it from https://developer.apple.com/download."])
         }
 
         try await appClipCommandManager.executeCommand(toolPath: toolPath,
