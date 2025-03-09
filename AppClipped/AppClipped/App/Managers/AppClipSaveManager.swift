@@ -1,5 +1,5 @@
 //
-//  AppClipSaver.swift
+//  AppClipSaveManager.swift
 //  AppClipped
 //
 //  Created by Matt Heaney on 08/03/2025.
@@ -7,7 +7,9 @@
 
 import Cocoa
 
-class AppClipSaver {
+///Handles allowing the user to save the generated App Clip code
+class AppClipSaveManager {
+
     public func promptUserForSaveLocation() async -> URL? {
         return await MainActor.run {
             let savePanel = NSSavePanel()
@@ -19,4 +21,5 @@ class AppClipSaver {
             return savePanel.runModal() == .OK ? savePanel.url : nil
         }
     }
+    
 }

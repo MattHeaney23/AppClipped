@@ -21,6 +21,8 @@ struct ContentView: View {
 
     let labelWidth: CGFloat = 100
 
+    let appClipCodeManager = AppClipCodeManager()
+
     var body: some View {
         VStack(spacing: 16) {
             colourModeSelector()
@@ -153,7 +155,7 @@ struct ContentView: View {
                         }
                     }
 
-                    try await AppClipCodeGenerator().generateAppClipCode(
+                    try await appClipCodeManager.generateAppClipCode(
                         url: enteredURL,
                         selectedColorMode: selectedColorMode,
                         selectedMode: selectedMode,

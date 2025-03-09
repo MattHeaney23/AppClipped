@@ -1,5 +1,5 @@
 //
-//  AppClipToolLocator.swift
+//  AppClipToolManager.swift
 //  AppClipped
 //
 //  Created by Matt Heaney on 08/03/2025.
@@ -7,7 +7,30 @@
 
 import Cocoa
 
-class AppClipToolLocator {
+///Handles locating the AppClipCodeGenerator tool on the user's system
+class AppClipToolManager {
+
+    public func validateToolInstallation() -> String? {
+        if let toolPath = findToolPath(), FileManager.default.fileExists(atPath: toolPath) {
+            return toolPath
+        }
+
+        let defaultPath = "/usr/local/bin/AppClipCodeGenerator"
+        if FileManager.default.fileExists(atPath: defaultPath) {
+            return defaultPath
+        }
+
+//Throw this up as an instead
+
+        DispatchQueue.main.async {
+            let alert = NSAlert()
+            alert.messageText = "AppClipCodeGenerator Not Found"
+            alert.informativeText = "AppClipped requires AppClipCodeGenerator installed. Please download and install it from https://developer.apple.com/download"
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+        }
+        return nil
+    }
 
     public func findToolPath() -> String? {
         let process = Process()
@@ -29,25 +52,4 @@ class AppClipToolLocator {
             return nil
         }
     }
-
-    public func validateToolInstallation() -> String? {
-        if let toolPath = findToolPath(), FileManager.default.fileExists(atPath: toolPath) {
-            return toolPath
-        }
-
-        let defaultPath = "/usr/local/bin/AppClipCodeGenerator"
-        if FileManager.default.fileExists(atPath: defaultPath) {
-            return defaultPath
-        }
-
-        DispatchQueue.main.async {
-            let alert = NSAlert()
-            alert.messageText = "AppClipCodeGenerator Not Found"
-            alert.informativeText = "AppClipped requires AppClipCodeGenerator installed. Please download and install it from https://developer.apple.com/download"
-            alert.addButton(withTitle: "OK")
-            alert.runModal()
-        }
-        return nil
-    }
-
 }
