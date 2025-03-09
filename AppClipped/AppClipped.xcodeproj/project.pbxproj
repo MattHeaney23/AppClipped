@@ -262,6 +262,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mattheaney23.AppClipped;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -289,6 +290,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mattheaney23.AppClipped;
 				PRODUCT_NAME = "$(TARGET_NAME)";

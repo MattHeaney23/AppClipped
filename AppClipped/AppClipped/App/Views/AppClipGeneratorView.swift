@@ -107,8 +107,8 @@ struct AppClipGeneratorView: View {
                     .frame(width: viewModel.labelWidth, alignment: .leading)
                     .bold()
                 Picker("", selection: $viewModel.selectedMode) {
-                    Text("Camera").tag(SelectedMode.camera)
-                    Text("NFC").tag(SelectedMode.nfc)
+                    Text("Camera").tag(ModeType.camera)
+                    Text("NFC").tag(ModeType.nfc)
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
@@ -118,8 +118,8 @@ struct AppClipGeneratorView: View {
                     .frame(width: viewModel.labelWidth, alignment: .leading)
                     .bold()
                 Picker("", selection: $viewModel.logoStyle) {
-                    Text("Show App Clip Logo").tag(LogoStyle.includeAppClipLogo)
-                    Text("Do Not Show App Clip Logo").tag(LogoStyle.doNotIncludeAppClipLogo)
+                    Text("Show App Clip Logo").tag(LogoType.logoIncluded)
+                    Text("Do Not Show App Clip Logo").tag(LogoType.logoNotIncluded)
                 }
                 .pickerStyle(SegmentedPickerStyle())
             }
@@ -131,6 +131,8 @@ struct AppClipGeneratorView: View {
     func buttonSection() -> some View {
         VStack(spacing: 16) {
             Divider()
+
+            errorMessage()
 
             Button {
                 Task {
@@ -146,5 +148,19 @@ struct AppClipGeneratorView: View {
             }
         }
         .padding(.vertical, 16)
+    }
+
+    @ViewBuilder
+    func errorMessage() -> some View {
+        switch viewModel.state {
+        case .error(let error):
+            Text("Something went wrong - \(error.localizedDescription)")
+                .font(.caption2)
+                .foregroundStyle(Color.red)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 16)
+                .fixedSize(horizontal: false, vertical: false)
+        default: EmptyView()
+        }
     }
 }

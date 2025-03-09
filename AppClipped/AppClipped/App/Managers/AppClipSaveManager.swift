@@ -10,6 +10,7 @@ import Cocoa
 ///Handles allowing the user to save the generated App Clip code
 class AppClipSaveManager {
 
+    ///Creates the Save Panel for the user to store their App Clip Code, return their selected location
     public func promptUserForSaveLocation() async -> URL? {
         return await MainActor.run {
             let savePanel = NSSavePanel()

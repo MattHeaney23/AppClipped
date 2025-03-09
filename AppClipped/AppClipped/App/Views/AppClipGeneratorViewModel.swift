@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+enum AppClipGeneratorState {
+    case ready
+    case loading
+    case error(Error)
+}
+
 class AppClipGeneratorViewModel: ObservableObject {
 
     let appClipToolManager = AppClipToolManager()
@@ -19,10 +25,11 @@ class AppClipGeneratorViewModel: ObservableObject {
     @Published var customBackgroundColor: Color = .blue
     @Published var customForegroundColor: Color = .white
 
-    @Published var selectedMode: SelectedMode = .camera
-    @Published var logoStyle: LogoStyle = .includeAppClipLogo
+    @Published var selectedMode: ModeType = .camera
+    @Published var logoStyle: LogoType = .logoIncluded
 
-    @Published var errorMessage: String?
+    @Published var state: AppClipGeneratorState = .ready
+
     @Published var shouldShowInstallationMessage: Bool = false
 
     let labelWidth: CGFloat = 100
@@ -33,7 +40,11 @@ class AppClipGeneratorViewModel: ObservableObject {
 
     func generateAppClipCode() async {
 
-        var selectedColorMode: SelectedColorMode {
+        await MainActor.run {
+            state = .ready
+        }
+
+        var selectedColorMode: ColorType {
             if selectedColorModeTab == 0 {
                 return .index(indexID: selectedColorIndexItem)
             } else {
@@ -49,8 +60,15 @@ class AppClipGeneratorViewModel: ObservableObject {
                 selectedMode: selectedMode,
                 logoStyle: logoStyle
             )
+
+            await MainActor.run {
+                state = .ready
+            }
+
         } catch(let error) {
-            self.errorMessage = error.localizedDescription
+            await MainActor.run {
+                state = .error(error)
+            }
         }
     }
 }

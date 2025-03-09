@@ -10,11 +10,12 @@ import Cocoa
 ///Handles creating and executing the command to generate the App Clip code
 class AppClipCommandManager {
 
+    ///Executes the command to generate the App Clip Code, and stores it in the provided location
     public func executeCommand(toolPath: String,
                                url: String,
-                               selectedColorMode: SelectedColorMode,
-                               selectedMode: SelectedMode,
-                               logoStyle: LogoStyle,
+                               selectedColorMode: ColorType,
+                               selectedMode: ModeType,
+                               logoStyle: LogoType,
                                outputURL: URL) async throws {
 
         var arguments: [String] = [

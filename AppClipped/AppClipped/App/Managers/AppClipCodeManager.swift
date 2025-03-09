@@ -14,10 +14,11 @@ class AppClipCodeManager {
     let appClipToolManager = AppClipToolManager()
     let appClipCommandManager = AppClipCommandManager()
 
+    ///Generates the App Clip Code, and launches the Save Panel
     func generateAppClipCode(url: String,
-                             selectedColorMode: SelectedColorMode,
-                             selectedMode: SelectedMode,
-                             logoStyle: LogoStyle) async throws {
+                             selectedColorMode: ColorType,
+                             selectedMode: ModeType,
+                             logoStyle: LogoType) async throws {
 
         guard let outputURL = await appClipSaveManager.promptUserForSaveLocation() else {
             throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User canceled save dialog"])

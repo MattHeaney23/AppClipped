@@ -10,11 +10,13 @@ import Cocoa
 ///Handles locating the AppClipCodeGenerator tool on the user's system
 class AppClipToolManager {
 
+    ///Returns true to the AppClipCodeGenerator tool is installed and can be found
     public func isToolInstaller() -> Bool {
         return pathForAppClipCodeGenerator() != nil
     }
 
-    private func pathForAppClipCodeGenerator() -> String? {
+    ///Returns the path for AppClipCodeGenerator
+    public func pathForAppClipCodeGenerator() -> String? {
 
         let defaultPath = "/usr/local/bin/AppClipCodeGenerator"
         if FileManager.default.fileExists(atPath: defaultPath) {
@@ -28,6 +30,7 @@ class AppClipToolManager {
         return nil
     }
 
+    ///Attempts to find the path for AppClipCodeGenerator, if it cannot be found at the default location
     private func findToolPath() -> String? {
         let process = Process()
         let pipe = Pipe()
