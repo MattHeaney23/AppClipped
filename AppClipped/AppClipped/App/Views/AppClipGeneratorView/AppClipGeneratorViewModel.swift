@@ -31,24 +31,22 @@ class AppClipGeneratorViewModel: ObservableObject {
     //MARK: Additional UI Values
     @Published var shouldShowInstallationMessage: Bool = false
 
+    var selectedColorMode: ColorType {
+        if selectedColorModeTab == 0 {
+            return .index(indexID: selectedColorIndexItem)
+        } else {
+            return .custom(foregroundColour: customBackgroundColor,
+                           backgroundColor: customForegroundColor)
+        }
+    }
+
     init() {
         self.shouldShowInstallationMessage = !appClipToolManager.isToolInstaller()
     }
 
     func generateAppClipCode() async {
 
-        await MainActor.run {
-            state = .loading
-        }
-
-        var selectedColorMode: ColorType {
-            if selectedColorModeTab == 0 {
-                return .index(indexID: selectedColorIndexItem)
-            } else {
-                return .custom(foregroundColour: customBackgroundColor,
-                               backgroundColor: customForegroundColor)
-            }
-        }
+        await MainActor.run { state = .loading }
 
         do {
             try await appClipCodeManager.generateAppClipCode(
@@ -58,14 +56,10 @@ class AppClipGeneratorViewModel: ObservableObject {
                 logoStyle: logoStyle
             )
 
-            await MainActor.run {
-                state = .ready
-            }
+            await MainActor.run { state = .ready }
 
         } catch(let error) {
-            await MainActor.run {
-                state = .error(error)
-            }
+            await MainActor.run { state = .error(error) }
         }
     }
 }
