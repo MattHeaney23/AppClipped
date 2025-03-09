@@ -7,32 +7,29 @@
 
 import SwiftUI
 
-enum AppClipGeneratorState {
-    case ready
-    case loading
-    case error(Error)
-}
-
 class AppClipGeneratorViewModel: ObservableObject {
 
+    //MARK: Dependancies
     let appClipToolManager = AppClipToolManager()
     let appClipCodeManager = AppClipCodeManager()
 
+    //MARK: User Entered Values
     @Published var enteredURL: String = ""
 
     @Published var selectedColorModeTab: Int = 0
     @Published var selectedColorIndexItem: Int = 0
+
     @Published var customBackgroundColor: Color = .blue
     @Published var customForegroundColor: Color = .white
 
     @Published var selectedMode: ModeType = .camera
     @Published var logoStyle: LogoType = .logoIncluded
 
+    //MARK: State
     @Published var state: AppClipGeneratorState = .ready
 
+    //MARK: Additional UI Values
     @Published var shouldShowInstallationMessage: Bool = false
-
-    let labelWidth: CGFloat = 100
 
     init() {
         self.shouldShowInstallationMessage = !appClipToolManager.isToolInstaller()
@@ -41,7 +38,7 @@ class AppClipGeneratorViewModel: ObservableObject {
     func generateAppClipCode() async {
 
         await MainActor.run {
-            state = .ready
+            state = .loading
         }
 
         var selectedColorMode: ColorType {

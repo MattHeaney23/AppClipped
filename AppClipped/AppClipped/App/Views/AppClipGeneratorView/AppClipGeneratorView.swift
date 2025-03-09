@@ -9,7 +9,11 @@ import SwiftUI
 
 struct AppClipGeneratorView: View {
 
+    //MARK: Dependancies
+
     @StateObject var viewModel = AppClipGeneratorViewModel()
+
+    //MARK: Body
 
     var body: some View {
         VStack(spacing: 16) {
@@ -21,7 +25,7 @@ struct AppClipGeneratorView: View {
         }
     }
 
-    //MARK: Views
+    //MARK: Views - Color Tab
 
     @ViewBuilder
     func colourModeSelector() -> some View {
@@ -42,6 +46,8 @@ struct AppClipGeneratorView: View {
             customColourSelection()
         }
     }
+
+    //MARK: Views - Color Tab Views
 
     @ViewBuilder
     func customColourSelection() -> some View {
@@ -90,12 +96,14 @@ struct AppClipGeneratorView: View {
         .padding(.vertical, 20)
     }
 
+    //MARK: Views - Bottom Bar
+
     @ViewBuilder
     func bottomSection() -> some View {
         VStack {
             HStack {
                 Text("URL")
-                    .frame(width: viewModel.labelWidth, alignment: .leading)
+                    .frame(width: 100, alignment: .leading)
                     .bold()
                 TextField("Enter URL", text: $viewModel.enteredURL)
                     .textFieldStyle(.roundedBorder)
@@ -104,7 +112,7 @@ struct AppClipGeneratorView: View {
 
             HStack {
                 Text("App Clip Type")
-                    .frame(width: viewModel.labelWidth, alignment: .leading)
+                    .frame(width: 100, alignment: .leading)
                     .bold()
                 Picker("", selection: $viewModel.selectedMode) {
                     Text("Camera").tag(ModeType.camera)
@@ -115,7 +123,7 @@ struct AppClipGeneratorView: View {
 
             HStack {
                 Text("Logo Type")
-                    .frame(width: viewModel.labelWidth, alignment: .leading)
+                    .frame(width: 100, alignment: .leading)
                     .bold()
                 Picker("", selection: $viewModel.logoStyle) {
                     Text("Show App Clip Logo").tag(LogoType.logoIncluded)
@@ -139,8 +147,17 @@ struct AppClipGeneratorView: View {
                     await viewModel.generateAppClipCode()
                 }
             } label: {
-                Text("Generate App Clip Code")
+                Group {
+                    switch viewModel.state {
+                    case .ready, .error(_):
+                        Text("Generate App Clip Code")
+                    case .loading:
+                        ProgressView()
+                            .scaleEffect(0.5)
+                    }
+                }.frame(width: 200, height: 30)
             }
+            .disabled(viewModel.state == .loading)
 
             if viewModel.shouldShowInstallationMessage {
                 Text("AppClipCodeGenerator from Apple is required to use this tool. Please download it from https://developer.apple.com/download")
