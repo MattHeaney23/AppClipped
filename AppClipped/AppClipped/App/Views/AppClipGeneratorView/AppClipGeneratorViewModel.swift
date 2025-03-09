@@ -8,29 +8,30 @@
 import SwiftUI
 
 @MainActor
-class AppClipGeneratorViewModel: ObservableObject {
+@Observable
+class AppClipGeneratorViewModel {
 
     //MARK: Dependancies
     let appClipToolManager = AppClipToolManager()
     let appClipCodeManager = AppClipCodeManager()
 
     //MARK: User Entered Values
-    @Published var enteredURL: String = ""
+    var enteredURL: String = ""
 
-    @Published var selectedColorModeTab: Int = 0
-    @Published var selectedColorIndexItem: Int = 0
+    var selectedColorModeTab: Int = 0
+    var selectedColorIndexItem: Int = 0
 
-    @Published var customBackgroundColor: Color = .blue
-    @Published var customForegroundColor: Color = .white
+    var customBackgroundColor: Color = .blue
+    var customForegroundColor: Color = .white
 
-    @Published var selectedMode: ModeType = .camera
-    @Published var logoStyle: LogoType = .logoIncluded
+    var selectedMode: ModeType = .camera
+    var logoStyle: LogoType = .logoIncluded
 
     //MARK: State
-    @Published var state: AppClipGeneratorState = .ready
+    var state: AppClipGeneratorState = .ready
 
     //MARK: Additional UI Values
-    @Published var shouldShowInstallationMessage: Bool = false
+    var shouldShowInstallationMessage: Bool = false
 
     var selectedColorMode: ColorType {
         if selectedColorModeTab == 0 {
