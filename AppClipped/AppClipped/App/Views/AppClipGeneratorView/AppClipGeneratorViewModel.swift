@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 class AppClipGeneratorViewModel: ObservableObject {
 
     //MARK: Dependancies
@@ -46,7 +47,7 @@ class AppClipGeneratorViewModel: ObservableObject {
 
     func generateAppClipCode() async {
 
-        await MainActor.run { state = .loading }
+        state = .loading
 
         do {
             try await appClipCodeManager.generateAppClipCode(
@@ -56,10 +57,10 @@ class AppClipGeneratorViewModel: ObservableObject {
                 logoStyle: logoStyle
             )
 
-            await MainActor.run { state = .ready }
+            state = .ready
 
         } catch(let error) {
-            await MainActor.run { state = .error(error) }
+            state = .error(error)
         }
     }
 }
