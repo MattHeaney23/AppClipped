@@ -11,7 +11,7 @@ struct AppClipGeneratorView: View {
 
     //MARK: Dependancies
 
-    @StateObject var viewModel = AppClipGeneratorViewModel()
+    @State var viewModel = AppClipGeneratorViewModel()
 
     //MARK: Body
 

@@ -11,16 +11,15 @@ import Cocoa
 class AppClipSaveManager {
 
     ///Creates the Save Panel for the user to store their App Clip Code, return their selected location
+    @MainActor
     public func promptUserForSaveLocation() async -> URL? {
-        return await MainActor.run {
-            let savePanel = NSSavePanel()
-            savePanel.nameFieldStringValue = "AppClip"
-            savePanel.allowedContentTypes = [.svg]
-            savePanel.canCreateDirectories = true
-            savePanel.directoryURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Desktop")
+        let savePanel = NSSavePanel()
+        savePanel.nameFieldStringValue = "AppClip"
+        savePanel.allowedContentTypes = [.svg]
+        savePanel.canCreateDirectories = true
+        savePanel.directoryURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Desktop")
 
-            return savePanel.runModal() == .OK ? savePanel.url : nil
-        }
+        return savePanel.runModal() == .OK ? savePanel.url : nil
     }
     
 }
