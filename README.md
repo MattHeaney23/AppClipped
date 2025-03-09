@@ -46,9 +46,11 @@ Since this is an open-source project, contributions are welcomed and encouraged!
 
 Contributions may include adding new features, optimizing existing functionality, or improving the user experience.
 
-To contribute:
+**To contribute**:
+- Find an issue to work on, or request a new feature
 - Fork this repo
 - Clone the repo to your machine
+- Add your changes
 - Raise a PR
 
 ## Limitations
