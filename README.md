@@ -1,7 +1,5 @@
 
-![256-mac](https://github.com/user-attachments/assets/4014aa17-fbda-4b1f-9cf8-d9a7b01f514b)
-
-# AppClipped
+![1024-mac copy](https://github.com/user-attachments/assets/f622117f-3b49-481c-b401-66dce42f7413)
 
 AppClipped is a macOS application designed to improve the generation and saving of App Clip Codes. This tool provides a clean and simple interface for working with Apple's App Clip Codes.
 
@@ -67,3 +65,8 @@ This project is licensed under the MIT License.
 ## Contact
 
 For questions or feedback, reach out to me on **X (Twitter)** at [@MattHeaney23](https://x.com/MattHeaney23) or on **LinkedIn** at [linkedin.com/in/mattheaney23](https://www.linkedin.com/in/mattheaney23/).
+
+## Contributors
+Thanks to 
+MutatingFunc (James Froggatt)
+JoaoFranco03 (João Franco)
