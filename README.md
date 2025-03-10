@@ -1,4 +1,5 @@
-![newicon](https://github.com/user-attachments/assets/0f7637b8-9110-4e7f-9e0b-c795a77ec17b)
+
+![256-mac](https://github.com/user-attachments/assets/4014aa17-fbda-4b1f-9cf8-d9a7b01f514b)
 
 # AppClipped
 
