@@ -37,8 +37,8 @@ class AppClipGeneratorViewModel {
         if selectedColorModeTab == 0 {
             return .index(indexID: selectedColorIndexItem)
         } else {
-            return .custom(foregroundColour: customBackgroundColor,
-                           backgroundColor: customForegroundColor)
+            return .custom(foregroundColour: customForegroundColor,
+                           backgroundColor: customBackgroundColor)
         }
     }
 

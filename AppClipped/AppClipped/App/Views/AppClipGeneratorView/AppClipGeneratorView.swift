@@ -32,6 +32,7 @@ struct AppClipGeneratorView: View {
         Picker("Colour Mode", selection: $viewModel.selectedColorModeTab) {
             Text("Select Style").tag(0)
             Text("Custom Style").tag(1)
+            Text("Logo Based").tag(2)
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding(.horizontal, 16)
@@ -42,30 +43,64 @@ struct AppClipGeneratorView: View {
     func colourTabView() -> some View {
         if viewModel.selectedColorModeTab == 0 {
             setColourSelection()
-        } else {
+        } else if viewModel.selectedColorModeTab == 1 {
             customColourSelection()
+        } else {
+            logoBasedColorSelection()
         }
     }
 
     //MARK: Views - Color Tab Views
 
+
+    @ViewBuilder
+    func logoBasedColorSelection() -> some View {
+        HStack(spacing: 40) {
+            ImageUploader(foregroundColor: $viewModel.customForegroundColor,
+                          backgroundColor: $viewModel.customBackgroundColor)
+
+            ZStack {
+                Rectangle()
+                    .foregroundStyle(viewModel.customBackgroundColor)
+                    .frame(width: 150, height: 150)
+                    .cornerRadius(24)
+                Image(.appClipMainLines)
+                    .resizable()
+                     .renderingMode(.template)
+                     .foregroundColor(viewModel.customForegroundColor)
+                    .frame(width: 140, height: 140)
+                Image(.appclipfaintlines)
+                    .resizable()
+                     .renderingMode(.template)
+                     .foregroundColor(viewModel.customForegroundColor.opacity(0.6))
+                    .frame(width: 140, height: 140)
+            }
+        }
+
+    }
+
     @ViewBuilder
     func customColourSelection() -> some View {
-        VStack(spacing: 12) {
-            HStack {
-                Text("Background Colour")
-                    .frame(width: 200, alignment: .leading)
-                    .bold()
-                ColorPicker("", selection: $viewModel.customBackgroundColor, supportsOpacity: false)
-                    .labelsHidden()
-            }
 
-            HStack {
-                Text("Foreground Colour")
-                    .frame(width: 200, alignment: .leading)
-                    .bold()
-                ColorPicker("", selection: $viewModel.customForegroundColor, supportsOpacity: false)
-                    .labelsHidden()
+
+        HStack {
+            VStack(spacing: 12) {
+                HStack {
+
+                    Text("Background Colour")
+                        .frame(width: 150, alignment: .leading)
+                        .bold()
+                    ColorPicker("", selection: $viewModel.customBackgroundColor, supportsOpacity: false)
+                        .labelsHidden()
+                }
+
+                HStack {
+                    Text("Foreground Colour")
+                        .frame(width: 150, alignment: .leading)
+                        .bold()
+                    ColorPicker("", selection: $viewModel.customForegroundColor, supportsOpacity: false)
+                        .labelsHidden()
+                }
             }
         }
         .frame(height: 120)
