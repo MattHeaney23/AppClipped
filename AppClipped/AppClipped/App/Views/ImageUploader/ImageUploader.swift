@@ -15,7 +15,7 @@ struct ImageUploader: View {
     @Binding var foregroundColor: Color
     @Binding var backgroundColor: Color
 
-    @State private var image: NSImage?
+    @Binding var image: NSImage?
 
     var body: some View {
         VStack {

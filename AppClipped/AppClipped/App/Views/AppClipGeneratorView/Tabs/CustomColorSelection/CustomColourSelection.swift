@@ -9,8 +9,7 @@ import SwiftUI
 
 struct CustomColourSelection: View {
 
-    @Binding var customForegroundColor: Color
-    @Binding var customBackgroundColor: Color
+    @State var viewModel: CustomColourSelectionViewModel
 
     var body: some View {
         HStack(spacing: 40) {
@@ -20,7 +19,7 @@ struct CustomColourSelection: View {
                     Text("Background Colour")
                         .frame(width: 150, alignment: .leading)
                         .bold()
-                    ColorPicker("", selection: $customBackgroundColor, supportsOpacity: false)
+                    ColorPicker("", selection: $viewModel.customBackgroundColor, supportsOpacity: false)
                         .labelsHidden()
                 }
 
@@ -28,13 +27,13 @@ struct CustomColourSelection: View {
                     Text("Foreground Colour")
                         .frame(width: 150, alignment: .leading)
                         .bold()
-                    ColorPicker("", selection: $customForegroundColor, supportsOpacity: false)
+                    ColorPicker("", selection: $viewModel.customForegroundColor, supportsOpacity: false)
                         .labelsHidden()
                 }
             }
 
-            AppClipColorPreview(customForegroundColor: $customForegroundColor,
-                                customBackgroundColor: $customBackgroundColor)
+            AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
+                                customBackgroundColor: $viewModel.customBackgroundColor)
             .frame(width: 150, height: 150)
         }
         .frame(height: 120)

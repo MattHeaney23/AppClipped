@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SetColourSelection: View {
 
-    @Binding var selectedColorIndexItem: Int
+    @State var viewModel: SetColourSelectionViewModel
 
     var body: some View {
 
@@ -23,10 +23,10 @@ struct SetColourSelection: View {
                         .cornerRadius(8)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
+                                .stroke(viewModel.selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
                         )
                         .onTapGesture {
-                            selectedColorIndexItem = i
+                            viewModel.selectedColorIndexItem = i
                         }
                 }
             }

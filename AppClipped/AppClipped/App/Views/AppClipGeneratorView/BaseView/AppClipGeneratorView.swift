@@ -42,13 +42,11 @@ struct AppClipGeneratorView: View {
     @ViewBuilder
     func colourTabView() -> some View {
         if viewModel.selectedColorModeTab == 0 {
-            SetColourSelection(selectedColorIndexItem: $viewModel.selectedColorModeTab)
+            SetColourSelection(viewModel: viewModel.setColourSelectionViewModel)
         } else if viewModel.selectedColorModeTab == 1 {
-            CustomColourSelection(customForegroundColor: $viewModel.customForegroundColor,
-                                  customBackgroundColor: $viewModel.customBackgroundColor)
+            CustomColourSelection(viewModel: viewModel.customColourSelectionViewModel)
         } else {
-            LogoBasedColorSelection(customForegroundColor: $viewModel.customForegroundColor,
-                                    customBackgroundColor: $viewModel.customBackgroundColor)
+            LogoBasedColorSelection(viewModel: viewModel.logoBasedColorSelectionViewModel)
         }
     }
 
