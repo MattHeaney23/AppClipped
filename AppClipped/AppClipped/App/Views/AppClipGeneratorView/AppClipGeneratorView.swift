@@ -52,38 +52,22 @@ struct AppClipGeneratorView: View {
 
     //MARK: Views - Color Tab Views
 
-
     @ViewBuilder
     func logoBasedColorSelection() -> some View {
         HStack(spacing: 40) {
             ImageUploader(foregroundColor: $viewModel.customForegroundColor,
                           backgroundColor: $viewModel.customBackgroundColor)
 
-            ZStack {
-                Rectangle()
-                    .foregroundStyle(viewModel.customBackgroundColor)
-                    .frame(width: 150, height: 150)
-                    .cornerRadius(24)
-                Image(.appClipMainLines)
-                    .resizable()
-                     .renderingMode(.template)
-                     .foregroundColor(viewModel.customForegroundColor)
-                    .frame(width: 140, height: 140)
-                Image(.appclipfaintlines)
-                    .resizable()
-                     .renderingMode(.template)
-                     .foregroundColor(viewModel.customForegroundColor.opacity(0.6))
-                    .frame(width: 140, height: 140)
-            }
+            AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
+                                customBackgroundColor: $viewModel.customBackgroundColor)
+            .frame(width: 150, height: 150)
         }
-
     }
 
     @ViewBuilder
     func customColourSelection() -> some View {
 
-
-        HStack {
+        HStack(spacing: 40) {
             VStack(spacing: 12) {
                 HStack {
 
@@ -102,6 +86,10 @@ struct AppClipGeneratorView: View {
                         .labelsHidden()
                 }
             }
+
+            AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
+                                customBackgroundColor: $viewModel.customBackgroundColor)
+            .frame(width: 150, height: 150)
         }
         .frame(height: 120)
         .padding(.vertical, 20)
