@@ -42,81 +42,14 @@ struct AppClipGeneratorView: View {
     @ViewBuilder
     func colourTabView() -> some View {
         if viewModel.selectedColorModeTab == 0 {
-            setColourSelection()
+            SetColourSelection(selectedColorIndexItem: $viewModel.selectedColorModeTab)
         } else if viewModel.selectedColorModeTab == 1 {
-            customColourSelection()
+            CustomColourSelection(customForegroundColor: $viewModel.customForegroundColor,
+                                  customBackgroundColor: $viewModel.customBackgroundColor)
         } else {
-            logoBasedColorSelection()
+            LogoBasedColorSelection(customForegroundColor: $viewModel.customForegroundColor,
+                                    customBackgroundColor: $viewModel.customBackgroundColor)
         }
-    }
-
-    //MARK: Views - Color Tab Views
-
-    @ViewBuilder
-    func logoBasedColorSelection() -> some View {
-        HStack(spacing: 40) {
-            ImageUploader(foregroundColor: $viewModel.customForegroundColor,
-                          backgroundColor: $viewModel.customBackgroundColor)
-
-            AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
-                                customBackgroundColor: $viewModel.customBackgroundColor)
-            .frame(width: 150, height: 150)
-        }
-    }
-
-    @ViewBuilder
-    func customColourSelection() -> some View {
-
-        HStack(spacing: 40) {
-            VStack(spacing: 12) {
-                HStack {
-
-                    Text("Background Colour")
-                        .frame(width: 150, alignment: .leading)
-                        .bold()
-                    ColorPicker("", selection: $viewModel.customBackgroundColor, supportsOpacity: false)
-                        .labelsHidden()
-                }
-
-                HStack {
-                    Text("Foreground Colour")
-                        .frame(width: 150, alignment: .leading)
-                        .bold()
-                    ColorPicker("", selection: $viewModel.customForegroundColor, supportsOpacity: false)
-                        .labelsHidden()
-                }
-            }
-
-            AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
-                                customBackgroundColor: $viewModel.customBackgroundColor)
-            .frame(width: 150, height: 150)
-        }
-        .frame(height: 120)
-        .padding(.vertical, 20)
-    }
-
-    @ViewBuilder
-    func setColourSelection() -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(0...17, id: \.self) { i in
-                    Image("AppClipStyle\(i)")
-                        .resizable()
-                        .frame(width: 120, height: 120)
-                        .background(Color.blue.opacity(0.7))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(viewModel.selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
-                        )
-                        .onTapGesture {
-                            viewModel.selectedColorIndexItem = i
-                        }
-                }
-            }
-            .padding(.horizontal, 16)
-        }
-        .padding(.vertical, 20)
     }
 
     //MARK: Views - Bottom Bar
