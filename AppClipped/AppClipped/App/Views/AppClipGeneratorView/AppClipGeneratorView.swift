@@ -5,6 +5,7 @@
 //  Created by Matt Heaney on 01/03/2025.
 //
 
+import AppKit
 import SwiftUI
 
 struct AppClipGeneratorView: View {
@@ -155,12 +156,21 @@ struct AppClipGeneratorView: View {
                         ProgressView()
                             .scaleEffect(0.5)
                     }
-                }.frame(width: 200, height: 30)
+                }.frame(width: 250, height: 30)
             }
             .disabled(viewModel.state == .loading)
+            
+            Button {
+                if let url = URL(string: "https://download.developer.apple.com/Developer_Tools/App_Clip_Code_Generator/App_Clip_Code_Generator.dmg") {
+                    NSWorkspace.shared.open(url)
+                }
+            } label: {
+                Text("Download AppClipCodeGenerator")
+                    .frame(width: 250, height: 30)
+            }
 
             if viewModel.shouldShowInstallationMessage {
-                Text("AppClipCodeGenerator from Apple is required to use this tool. Please download it from https://developer.apple.com/download")
+                Text("AppClipCodeGenerator from Apple is required to use this tool. You can find it and more about App Clips at https://developer.apple.com/app-clips/resources/")
                     .font(.caption2)
             }
         }
