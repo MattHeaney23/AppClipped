@@ -11,7 +11,7 @@ import SwiftUI
 @Observable
 class AppClipGeneratorViewModel {
 
-    //MARK: Dependancies
+    //MARK: Dependencies
     let appClipToolManager = AppClipToolManager()
     let appClipCodeManager = AppClipCodeManager()
 

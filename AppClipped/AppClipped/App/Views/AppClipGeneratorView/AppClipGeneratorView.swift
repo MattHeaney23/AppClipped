@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AppClipGeneratorView: View {
 
-    //MARK: Dependancies
+    //MARK: Dependencies
 
     @State var viewModel = AppClipGeneratorViewModel()
 
