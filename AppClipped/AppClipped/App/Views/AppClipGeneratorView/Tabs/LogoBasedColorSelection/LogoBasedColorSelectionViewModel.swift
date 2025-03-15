@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 @Observable
 class LogoBasedColorSelectionViewModel {
     var customForegroundColor: Color = .blue

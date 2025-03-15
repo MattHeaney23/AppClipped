@@ -8,7 +8,7 @@
 import AppKit
 
 extension NSColor {
-    // Picks black or white based on the primary color’s brightness and contrast needs
+    ///Decides if black or white is the best option, based on the color’s brightness and contrast
     func pickHighContrastBlackOrWhite() -> NSColor {
         guard let hsb = self.usingColorSpace(.sRGB) else { return .black }
 

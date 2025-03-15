@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 @Observable
 class SetColourSelectionViewModel {
     var selectedColorIndexItem: Int = 0

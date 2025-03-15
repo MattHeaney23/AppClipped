@@ -8,7 +8,7 @@
 import AppKit
 
 extension NSColor {
-    //Rounds the color in the RGB to 1 decimal place
+    ///Rounds the color in the RGB to 1 decimal place
     func roundColor() -> NSColor {
         guard let rgbColor = self.usingColorSpace(.sRGB) else { return self }
 

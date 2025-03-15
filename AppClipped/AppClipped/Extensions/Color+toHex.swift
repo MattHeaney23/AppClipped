@@ -8,6 +8,7 @@
 import SwiftUI
 
 extension Color {
+    ///Converts a color to RGB
     func toHex() -> String? {
         guard let nsColor = NSColor(self).usingColorSpace(.sRGB) else { return nil }
         let r = Int(nsColor.redComponent * 255)

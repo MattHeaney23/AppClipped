@@ -9,8 +9,10 @@ import SwiftUI
 
 struct SetColourSelection: View {
 
+    //MARK: Dependancies
     @State var viewModel: SetColourSelectionViewModel
 
+    //MARK: Body
     var body: some View {
 
         ScrollView(.horizontal, showsIndicators: false) {

@@ -9,8 +9,10 @@ import SwiftUI
 
 struct CustomColourSelection: View {
 
+    //MARK: Dependancies
     @State var viewModel: CustomColourSelectionViewModel
 
+    //MARK: Body
     var body: some View {
         HStack(spacing: 40) {
             VStack(spacing: 12) {
@@ -34,7 +36,7 @@ struct CustomColourSelection: View {
 
             AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
                                 customBackgroundColor: $viewModel.customBackgroundColor)
-            .frame(width: 150, height: 150)
+                .frame(width: 150, height: 150)
         }
         .frame(height: 120)
         .padding(.vertical, 20)

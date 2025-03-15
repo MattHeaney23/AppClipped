@@ -24,12 +24,12 @@ class ImageToColorManager {
 
     private func findNextHighlyDistinctColor(_ primary: NSColor, candidates: [NSColor]) -> NSColor {
 
-        // Use the NSColor extension method to check distinctiveness
+        // Find the next suitable color to use
         if let distinctColor = candidates.first(where: { $0.isHighlyDistinct(from: primary) }) {
             return distinctColor
         }
 
-        // If no distinct color is found, pick black or white with improved contrast logic
+        // If no distinct color is found, deice if black or white would be the best choice
         return primary.pickHighContrastBlackOrWhite()
     }
 }

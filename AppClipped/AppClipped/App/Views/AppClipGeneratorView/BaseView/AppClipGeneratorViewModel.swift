@@ -38,14 +38,19 @@ class AppClipGeneratorViewModel {
     var shouldShowInstallationMessage: Bool = false
 
     var selectedColorMode: ColorType {
-        if selectedColorModeTab == 0 {
+
+        switch selectedColorModeTab {
+        case 0:
             return .index(indexID: setColourSelectionViewModel.selectedColorIndexItem)
-        } else if selectedColorModeTab == 1 {
+        case 1:
             return .custom(foregroundColour: customColourSelectionViewModel.customForegroundColor,
                            backgroundColor: customColourSelectionViewModel.customBackgroundColor)
-        } else {
+        case 2:
             return .custom(foregroundColour: logoBasedColorSelectionViewModel.customForegroundColor,
                            backgroundColor: logoBasedColorSelectionViewModel.customBackgroundColor)
+        default:
+            return .custom(foregroundColour: Color.black,
+                           backgroundColor: Color.white)
         }
     }
 

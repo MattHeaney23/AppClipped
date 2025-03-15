@@ -10,8 +10,10 @@ import SwiftUI
 
 struct LogoBasedColorSelection: View {
 
+    //MARK: Dependancies
     @State var viewModel:  LogoBasedColorSelectionViewModel
 
+    //MARK: Body
     var body: some View {
         HStack(spacing: 40) {
             ImageUploader(foregroundColor: $viewModel.customForegroundColor,
@@ -20,7 +22,7 @@ struct LogoBasedColorSelection: View {
 
             AppClipColorPreview(customForegroundColor: $viewModel.customForegroundColor,
                                 customBackgroundColor: $viewModel.customBackgroundColor)
-            .frame(width: 150, height: 150)
+                .frame(width: 150, height: 150)
         }
     }
 

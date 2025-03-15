@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 @Observable
 class CustomColourSelectionViewModel {
     var customForegroundColor: Color = .blue
