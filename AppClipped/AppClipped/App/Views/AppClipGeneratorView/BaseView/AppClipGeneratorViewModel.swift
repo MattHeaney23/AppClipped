@@ -15,6 +15,10 @@ class AppClipGeneratorViewModel {
     let appClipToolManager = AppClipToolManager()
     let appClipCodeManager = AppClipCodeManager()
 
+    var setColourSelectionViewModel = SetColourSelectionViewModel()
+    var customColourSelectionViewModel = CustomColourSelectionViewModel()
+    var logoBasedColorSelectionViewModel = LogoBasedColorSelectionViewModel()
+
     //MARK: User Entered Values
     var enteredURL: String = ""
 
@@ -34,11 +38,19 @@ class AppClipGeneratorViewModel {
     var shouldShowInstallationMessage: Bool = false
 
     var selectedColorMode: ColorType {
-        if selectedColorModeTab == 0 {
-            return .index(indexID: selectedColorIndexItem)
-        } else {
-            return .custom(foregroundColour: customForegroundColor,
-                           backgroundColor: customBackgroundColor)
+
+        switch selectedColorModeTab {
+        case 0:
+            return .index(indexID: setColourSelectionViewModel.selectedColorIndexItem)
+        case 1:
+            return .custom(foregroundColour: customColourSelectionViewModel.customForegroundColor,
+                           backgroundColor: customColourSelectionViewModel.customBackgroundColor)
+        case 2:
+            return .custom(foregroundColour: logoBasedColorSelectionViewModel.customForegroundColor,
+                           backgroundColor: logoBasedColorSelectionViewModel.customBackgroundColor)
+        default:
+            return .custom(foregroundColour: Color.black,
+                           backgroundColor: Color.white)
         }
     }
 

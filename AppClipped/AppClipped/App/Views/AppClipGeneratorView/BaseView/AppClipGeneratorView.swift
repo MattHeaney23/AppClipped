@@ -32,6 +32,7 @@ struct AppClipGeneratorView: View {
         Picker("Colour Mode", selection: $viewModel.selectedColorModeTab) {
             Text("Select Style").tag(0)
             Text("Custom Style").tag(1)
+            Text("Logo Based").tag(2)
         }
         .pickerStyle(SegmentedPickerStyle())
         .padding(.horizontal, 16)
@@ -41,59 +42,12 @@ struct AppClipGeneratorView: View {
     @ViewBuilder
     func colourTabView() -> some View {
         if viewModel.selectedColorModeTab == 0 {
-            setColourSelection()
+            SetColourSelection(viewModel: viewModel.setColourSelectionViewModel)
+        } else if viewModel.selectedColorModeTab == 1 {
+            CustomColourSelection(viewModel: viewModel.customColourSelectionViewModel)
         } else {
-            customColourSelection()
+            LogoBasedColorSelection(viewModel: viewModel.logoBasedColorSelectionViewModel)
         }
-    }
-
-    //MARK: Views - Color Tab Views
-
-    @ViewBuilder
-    func customColourSelection() -> some View {
-        VStack(spacing: 12) {
-            HStack {
-                Text("Background Colour")
-                    .frame(width: 200, alignment: .leading)
-                    .bold()
-                ColorPicker("", selection: $viewModel.customBackgroundColor, supportsOpacity: false)
-                    .labelsHidden()
-            }
-
-            HStack {
-                Text("Foreground Colour")
-                    .frame(width: 200, alignment: .leading)
-                    .bold()
-                ColorPicker("", selection: $viewModel.customForegroundColor, supportsOpacity: false)
-                    .labelsHidden()
-            }
-        }
-        .frame(height: 120)
-        .padding(.vertical, 20)
-    }
-
-    @ViewBuilder
-    func setColourSelection() -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(0...17, id: \.self) { i in
-                    Image("AppClipStyle\(i)")
-                        .resizable()
-                        .frame(width: 120, height: 120)
-                        .background(Color.blue.opacity(0.7))
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(viewModel.selectedColorIndexItem == i ? Color.blue : Color.clear, lineWidth: 4)
-                        )
-                        .onTapGesture {
-                            viewModel.selectedColorIndexItem = i
-                        }
-                }
-            }
-            .padding(.horizontal, 16)
-        }
-        .padding(.vertical, 20)
     }
 
     //MARK: Views - Bottom Bar
